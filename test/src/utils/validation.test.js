@@ -17,6 +17,12 @@ describe("isValidEmail", () => {
         expect(isValidEmail(" @ . ")).toBe(false);
 
     });
+    it("is false for strings with more than 255 characters", () => {
+        let str = "a".repeat(247) + "@sld.tld";
+        expect(isValidEmail(str)).toBe(true);
+        str = "a" + str;
+        expect(isValidEmail(str)).toBe(false);
+    });
     it("is false for strings with no username", () => {
         expect(isValidEmail("@sld.tld")).toBe(false);
     });
