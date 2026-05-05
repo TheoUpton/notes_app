@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import {isValidEmail} from "@src/utils/validation";
+import { isValidEmail, isValidPassword } from "@src/utils/validation";
 
 describe("isValidEmail", () => {
     it("is false for strings with 0 or multiple @ characters", () => {
@@ -35,5 +35,33 @@ describe("isValidEmail", () => {
     });
     it("validates 'example@sld.tld'", () => {
         expect(isValidEmail("example@sld.tld")).toBe(true);
+    });
+});
+
+describe("isValidPassword", () => {
+    it("is false for passwords that are non strings", () => {
+        expect(isValidPassword(234456)).toBe(false);
+    });
+    it("is false for passwords over 127 characters long", () => {
+        let str = "aZ1#";
+        expect(isValidPassword(str)).toBe(true);
+        str = "a".repeat(123) + str;
+        expect(isValidPassword(str)).toBe(true);
+        expect(isValidPassword("a" + str)).toBe(false);
+    });
+    it("is false for passwords without a lowercase letter", () => {
+        expect(isValidPassword("Z1#")).toBe(false);
+    });
+    it("is false for passwords without a uppercase letter", () => {
+        expect(isValidPassword("a1#")).toBe(false);
+    });
+    it("is false for passwords without a digit", () => {
+        expect(isValidPassword("aZ#")).toBe(false);
+    });
+    it("is false for passwords without a special character", () => {
+        expect(isValidPassword("aZ1")).toBe(false);
+    });
+    it("is false for passwords with a space", () => {
+        expect(isValidPassword("aZ 1#")).toBe(false);
     });
 });
