@@ -5,6 +5,7 @@ import { dirname, join } from "path";
 import dotenv from "dotenv";
 
 import authRouter from "./routes/auth.js";
+import notesRouter from "./routes/notes.js";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "../public")));
 app.use("/api/auth", authRouter);
+app.use("/api/notes", notesRouter);
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
