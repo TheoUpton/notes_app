@@ -72,3 +72,7 @@ export class TaskUpdater{
         return result.rows[0];
     }
 }
+export async function deleteTask(task_id, user_id){
+    const result = await pool.query("DELETE FROM notes WHERE id = $1 AND user_id = $2", [task_id, user_id]);
+    return result.rowCount > 0;
+}

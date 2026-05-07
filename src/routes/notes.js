@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { requireAuth } from "../middleware/auth";
-import { createTask, hasTask, listTasks, TaskUpdater } from "../db/notes";
+import { createTask, deleteTask, hasTask, listTasks, TaskUpdater } from "../db/notes";
 
 const router = Router();
 
@@ -38,6 +38,11 @@ router.patch("/:id", requireAuth, async (req, res) => {
     try { res.json(await updater.execute());}
     catch (err) { res.status(500).json({error: "server_error", message: "Something went wrong"})}
 });
-router.delete("/:id", requireAuth, async (req, res) => res.sendStatus(501));
+router.delete("/:id", requireAuth, async (req, res) => {
+    const user_id = req.userId;
+    const id = req.params.id;
+    if(await deleteTask(id, user_id)) res.sendStatus(204);
+    else res.status(404).json({error: "not_found", message: "Task not found"});
+});
 
 export default router;
